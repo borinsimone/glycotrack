@@ -13,6 +13,7 @@ import Dashboard from './components/Dashboard';
 import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
+  // test
   return (
     <Router>
       <AuthProvider>
