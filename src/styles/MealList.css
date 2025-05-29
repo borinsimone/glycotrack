@@ -1,0 +1,40 @@
+.meal-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 100%;
+}
+
+.meal-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  background: #e0e5ec;
+  border-radius: 15px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.meal-item:hover {
+  transform: translateY(-1px);
+  box-shadow: 8px 8px 16px rgba(163, 177, 198, 0.3),
+    -8px -8px 16px rgba(255, 255, 255, 0.8);
+}
+
+.meal-name {
+  font-weight: 600;
+  color: #31456a;
+  font-size: 16px;
+}
+
+.meal-sugar {
+  color: #31456a;
+  font-size: 14px;
+  font-weight: 500;
+  background: linear-gradient(145deg, #f0f5ff, #d1d9e6);
+  padding: 8px 12px;
+  border-radius: 12px;
+  box-shadow: inset 3px 3px 6px rgba(163, 177, 198, 0.2),
+    inset -3px -3px 6px rgba(255, 255, 255, 0.8);
+}

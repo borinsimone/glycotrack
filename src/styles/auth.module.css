@@ -1,0 +1,115 @@
+.container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #e0e5ec 0%, #e8edf5 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.card {
+  background: #e0e5ec;
+  border-radius: 20px;
+  padding: 40px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 9px 9px 16px #a3b1c6, -9px -9px 16px #ffffff;
+}
+
+.title {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #31456a;
+  font-size: 2rem;
+  font-weight: 300;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.label {
+  color: #31456a;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.input {
+  background: #e0e5ec;
+  border: none;
+  border-radius: 12px;
+  padding: 15px 20px;
+  font-size: 1rem;
+  color: #31456a;
+  box-shadow: inset 4px 4px 8px #a3b1c6, inset -4px -4px 8px #ffffff;
+  transition: all 0.3s ease;
+}
+
+.input:focus {
+  outline: none;
+  box-shadow: inset 6px 6px 12px #a3b1c6, inset -6px -6px 12px #ffffff;
+}
+
+.button {
+  background: #667eea;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 15px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 4px 4px 8px #a3b1c6, -4px -4px 8px #ffffff;
+}
+
+.button:hover {
+  background: #5a67d8;
+  transform: translateY(-2px);
+  box-shadow: 6px 6px 12px #a3b1c6, -6px -6px 12px #ffffff;
+}
+
+.button:active {
+  transform: translateY(0);
+  box-shadow: inset 4px 4px 8px #a3b1c6, inset -4px -4px 8px #ffffff;
+}
+
+.button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.switchText {
+  text-align: center;
+  margin-top: 20px;
+  color: #31456a;
+}
+
+.switchLink {
+  color: #667eea;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.switchLink:hover {
+  color: #5a67d8;
+}
+
+.error {
+  color: #e53e3e;
+  font-size: 0.9rem;
+  text-align: center;
+  margin-top: 10px;
+  padding: 10px;
+  background: rgba(229, 62, 62, 0.1);
+  border-radius: 8px;
+}
