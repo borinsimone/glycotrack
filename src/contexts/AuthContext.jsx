@@ -29,6 +29,8 @@ export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  console.log('AuthProvider rendering...'); // Debug log
+
   const signup = (email, password) => {
     // Check if using demo credentials
     if (email === DEMO_CREDENTIALS.email) {
@@ -59,7 +61,10 @@ export const AuthProvider = ({ children }) => {
   };
 
   useEffect(() => {
+    console.log('AuthProvider useEffect running...'); // Debug log
+
     const unsubscribe = onAuthStateChanged(auth, (user) => {
+      console.log('Auth state changed:', user); // Debug log
       setCurrentUser(user);
       setLoading(false);
     });
@@ -69,6 +74,7 @@ export const AuthProvider = ({ children }) => {
       !auth.app.options.apiKey ||
       auth.app.options.apiKey === 'your-api-key'
     ) {
+      console.log('No Firebase config, setting loading to false'); // Debug log
       setLoading(false);
     }
 
@@ -81,6 +87,8 @@ export const AuthProvider = ({ children }) => {
     login,
     logout,
   };
+
+  console.log('AuthProvider state:', { currentUser, loading }); // Debug log
 
   return (
     <AuthContext.Provider value={value}>

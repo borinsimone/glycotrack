@@ -13,34 +13,38 @@ import Dashboard from './components/Dashboard';
 import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
-  // test
+  // Get the base name from Vite's base config
+  const basename = import.meta.env.MODE === 'production' ? '/glycotrack' : '';
+
   return (
-    <Router>
-      <AuthProvider>
-        <Routes>
-          <Route
-            path='/login'
-            element={<Login />}
-          />
-          <Route
-            path='/register'
-            element={<Register />}
-          />
-          <Route
-            path='/dashboard'
-            element={
-              <ProtectedRoute>
-                <Dashboard />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path='/'
-            element={<Navigate to='/dashboard' />}
-          />
-        </Routes>
-      </AuthProvider>
-    </Router>
+    <div className='App'>
+      <Router basename={basename}>
+        <AuthProvider>
+          <Routes>
+            <Route
+              path='/login'
+              element={<Login />}
+            />
+            <Route
+              path='/register'
+              element={<Register />}
+            />
+            <Route
+              path='/dashboard'
+              element={
+                <ProtectedRoute>
+                  <Dashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path='/'
+              element={<Navigate to='/dashboard' />}
+            />
+          </Routes>
+        </AuthProvider>
+      </Router>
+    </div>
   );
 }
 
