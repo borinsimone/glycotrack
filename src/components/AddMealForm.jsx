@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useSettings } from '../contexts/SettingsContext';
 import '../styles/AddMealForm.css';
 
 const AddMealForm = ({ onAddMeal, onClose }) => {
@@ -11,19 +12,58 @@ const AddMealForm = ({ onAddMeal, onClose }) => {
   const [isLoadingNutrition, setIsLoadingNutrition] = useState(false);
   const [error, setError] = useState('');
 
+  // Use global settings context
+  const { calculateInsulinUnits, insulinSettings } = useSettings();
+
+  // Function to translate food name to English
+  const translateToEnglish = async (italianText) => {
+    try {
+      console.log('🌐 [DEBUG] Traduzione richiesta per:', italianText);
+
+      // Using MyMemory Translation API (free, no key required)
+      const response = await fetch(
+        `https://api.mymemory.translated.net/get?q=${encodeURIComponent(
+          italianText
+        )}&langpair=it|en`
+      );
+
+      if (!response.ok) {
+        throw new Error('Errore nella traduzione');
+      }
+
+      const data = await response.json();
+      const translatedText = data.responseData?.translatedText || italianText;
+
+      console.log('🌐 [DEBUG] Traduzione completata:', {
+        original: italianText,
+        translated: translatedText,
+      });
+
+      return translatedText;
+    } catch (error) {
+      console.error('❌ [DEBUG] Errore traduzione:', error);
+      // Fallback: return original text if translation fails
+      return italianText;
+    }
+  };
+
   // Function to get nutrition data from API
   const getNutritionData = async (foodName, grams) => {
     try {
       setIsLoadingNutrition(true);
       setError('');
 
+      // Translate food name to English first
+      const englishFoodName = await translateToEnglish(foodName);
+
       console.log('🔍 [DEBUG] Richiesta API Nutritionix:', {
-        query: `${grams}g ${foodName}`,
+        originalName: foodName,
+        translatedName: englishFoodName,
+        query: `${grams}g ${englishFoodName}`,
         grams,
-        foodName,
       });
 
-      // Using Nutritionix API
+      // Using Nutritionix API with translated name
       const response = await fetch(
         'https://trackapi.nutritionix.com/v2/natural/nutrients',
         {
@@ -34,7 +74,7 @@ const AddMealForm = ({ onAddMeal, onClose }) => {
             'x-app-key': '205ca681b8105210da1e4779cd1ce67b',
           },
           body: JSON.stringify({
-            query: `${grams}g ${foodName}`,
+            query: `${grams}g ${englishFoodName}`,
           }),
         }
       );
@@ -97,12 +137,14 @@ const AddMealForm = ({ onAddMeal, onClose }) => {
 
     // Get carb content from API
     const carbContent = await getNutritionData(currentFood.name, grams);
+    const insulinUnits = calculateInsulinUnits(carbContent);
 
     const newFoodItem = {
       id: Date.now(),
       name: currentFood.name,
       grams: grams,
       carbContent: carbContent,
+      insulinUnits: insulinUnits,
     };
 
     setFoodItems([...foodItems, newFoodItem]);
@@ -117,6 +159,12 @@ const AddMealForm = ({ onAddMeal, onClose }) => {
   const getTotalCarbs = () => {
     return foodItems
       .reduce((total, item) => total + item.carbContent, 0)
+      .toFixed(1);
+  };
+
+  const getTotalInsulin = () => {
+    return foodItems
+      .reduce((total, item) => total + item.insulinUnits, 0)
       .toFixed(1);
   };
 
@@ -137,6 +185,8 @@ const AddMealForm = ({ onAddMeal, onClose }) => {
       name: mealName,
       foodItems: foodItems,
       carbLevel: `${getTotalCarbs()}g`,
+      insulinUnits: `${getTotalInsulin()}u`,
+      insulinSettings: insulinSettings,
     };
 
     onAddMeal(mealData);
@@ -213,7 +263,8 @@ const AddMealForm = ({ onAddMeal, onClose }) => {
                         {item.grams > 1 ? ` (${item.grams}g)` : ''}
                       </span>
                       <span className='food-info'>
-                        {item.carbContent}g carboidrati
+                        {item.carbContent}g carboidrati • {item.insulinUnits}u
+                        insulina
                       </span>
                     </div>
                     <button
@@ -226,8 +277,13 @@ const AddMealForm = ({ onAddMeal, onClose }) => {
                   </div>
                 ))}
               </div>
-              <div className='total-carbs'>
-                <strong>Carboidrati totali: {getTotalCarbs()}g</strong>
+              <div className='total-summary'>
+                <div className='total-carbs'>
+                  <strong>Carboidrati totali: {getTotalCarbs()}g</strong>
+                </div>
+                <div className='total-insulin'>
+                  <strong>Insulina totale: {getTotalInsulin()}u</strong>
+                </div>
               </div>
             </div>
           )}

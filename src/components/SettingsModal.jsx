@@ -1,12 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useSettings } from '../contexts/SettingsContext';
 import '../styles/SettingsModal.css';
 
 const SettingsModal = ({ user, onClose, onLogout }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [displayName, setDisplayName] = useState(user?.displayName || '');
-  const [insulinRatio, setInsulinRatio] = useState('1:10'); // Default ratio
+  const [lastUpdate, setLastUpdate] = useState('');
+  const { insulinSettings, setInsulinSettings, predefinedRatios } =
+    useSettings();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const now = new Date();
+    const formatter = new Intl.DateTimeFormat('it-IT', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    });
+    setLastUpdate(formatter.format(now));
+  }, []);
 
   const handleSaveProfile = () => {
     // TODO: Implement profile update logic
@@ -20,6 +33,28 @@ const SettingsModal = ({ user, onClose, onLogout }) => {
     } catch (error) {
       console.error('Errore durante il logout:', error);
     }
+  };
+
+  const handleInsulinRatioChange = (newRatio) => {
+    setInsulinSettings({
+      ...insulinSettings,
+      predefinedRatio: newRatio,
+      useCustomRatio: false,
+    });
+  };
+
+  const handleCustomRatioToggle = (useCustom) => {
+    setInsulinSettings({
+      ...insulinSettings,
+      useCustomRatio: useCustom,
+    });
+  };
+
+  const handleCustomRatioChange = (newRatio) => {
+    setInsulinSettings({
+      ...insulinSettings,
+      customRatio: parseFloat(newRatio) || 10,
+    });
   };
 
   return (
@@ -104,31 +139,67 @@ const SettingsModal = ({ user, onClose, onLogout }) => {
             <div className='insulin-settings'>
               <div className='setting-row'>
                 <span className='setting-label'>
-                  Rapporto Insulina/Zuccheri:
+                  Rapporto Insulina/Carboidrati:
                 </span>
                 <select
                   className='ratio-select'
-                  value={insulinRatio}
-                  onChange={(e) => setInsulinRatio(e.target.value)}
+                  value={insulinSettings.predefinedRatio}
+                  onChange={(e) => handleInsulinRatioChange(e.target.value)}
+                  disabled={insulinSettings.useCustomRatio}
                 >
-                  <option value='1:8'>1:8 (1 unità per 8g di zuccheri)</option>
+                  <option value='1:5'>1:5 (1 unità per 5g carboidrati)</option>
                   <option value='1:10'>
-                    1:10 (1 unità per 10g di zuccheri)
-                  </option>
-                  <option value='1:12'>
-                    1:12 (1 unità per 12g di zuccheri)
+                    1:10 (1 unità per 10g carboidrati)
                   </option>
                   <option value='1:15'>
-                    1:15 (1 unità per 15g di zuccheri)
+                    1:15 (1 unità per 15g carboidrati)
                   </option>
-                  <option value='custom'>Personalizzato</option>
+                  <option value='1:20'>
+                    1:20 (1 unità per 20g carboidrati)
+                  </option>
                 </select>
               </div>
 
+              <div className='setting-row'>
+                <span className='setting-label'>Rapporto personalizzato:</span>
+                <label
+                  style={{ display: 'flex', alignItems: 'center', gap: '10px' }}
+                >
+                  <input
+                    type='checkbox'
+                    checked={insulinSettings.useCustomRatio}
+                    onChange={(e) => handleCustomRatioToggle(e.target.checked)}
+                  />
+                  Usa rapporto personalizzato
+                </label>
+              </div>
+
+              {insulinSettings.useCustomRatio && (
+                <div className='setting-row'>
+                  <span className='setting-label'>
+                    Grammi carboidrati per 1u insulina:
+                  </span>
+                  <input
+                    type='number'
+                    className='edit-input'
+                    value={insulinSettings.customRatio}
+                    onChange={(e) => handleCustomRatioChange(e.target.value)}
+                    min='1'
+                    max='50'
+                    step='0.5'
+                    style={{ width: '100px' }}
+                  />
+                </div>
+              )}
+
               <div className='setting-info'>
                 <small>
-                  Questo rapporto verrà utilizzato per calcolare automaticamente
-                  le dosi di insulina consigliate (funzionalità in arrivo).
+                  Rapporto attuale: 1 unità di insulina per{' '}
+                  {insulinSettings.useCustomRatio
+                    ? insulinSettings.customRatio
+                    : predefinedRatios[insulinSettings.predefinedRatio]}
+                  g di carboidrati. Questo viene utilizzato per calcolare
+                  automaticamente le dosi di insulina nei pasti.
                 </small>
               </div>
             </div>
@@ -144,7 +215,7 @@ const SettingsModal = ({ user, onClose, onLogout }) => {
               </div>
               <div className='info-row'>
                 <span className='info-label'>Ultimo aggiornamento:</span>
-                <span className='info-value'>Gennaio 2024</span>
+                <span className='info-value'>{lastUpdate}</span>
               </div>
             </div>
           </div>

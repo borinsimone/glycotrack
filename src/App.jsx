@@ -5,6 +5,7 @@ import {
   Navigate,
 } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
+import { SettingsProvider } from './contexts/SettingsContext';
 
 import './App.css';
 import Login from './components/auth/Login';
@@ -20,28 +21,30 @@ function App() {
     <div className='App'>
       <Router basename={basename}>
         <AuthProvider>
-          <Routes>
-            <Route
-              path='/login'
-              element={<Login />}
-            />
-            <Route
-              path='/register'
-              element={<Register />}
-            />
-            <Route
-              path='/dashboard'
-              element={
-                <ProtectedRoute>
-                  <Dashboard />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path='/'
-              element={<Navigate to='/dashboard' />}
-            />
-          </Routes>
+          <SettingsProvider>
+            <Routes>
+              <Route
+                path='/login'
+                element={<Login />}
+              />
+              <Route
+                path='/register'
+                element={<Register />}
+              />
+              <Route
+                path='/dashboard'
+                element={
+                  <ProtectedRoute>
+                    <Dashboard />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path='/'
+                element={<Navigate to='/dashboard' />}
+              />
+            </Routes>
+          </SettingsProvider>
         </AuthProvider>
       </Router>
     </div>

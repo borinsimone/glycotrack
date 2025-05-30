@@ -46,7 +46,10 @@ const MealList = ({ meals, onMealClick }) => {
           onClick={() => onMealClick(meal)}
         >
           <div className='meal-name'>{meal.name}</div>
-          <div className='meal-sugar'>Zuccheri - {meal.sugarLevel}</div>
+          <div className='meal-info'>
+            <div className='meal-sugar'>Zuccheri - {meal.sugarLevel}</div>
+            <div className='meal-insulin'>Insulina - {meal.insulinUnits}</div>
+          </div>
         </motion.div>
       ))}
     </motion.div>

@@ -17,15 +17,15 @@
   background: #e0e5ec;
   border-radius: 15px;
   padding: 15px;
-  box-shadow: 12px 12px 24px rgba(163, 177, 198, 0.6),
-    -12px -12px 24px rgba(255, 255, 255, 0.8);
+  box-shadow: inset 8px 8px 16px rgba(163, 177, 198, 0.3),
+    inset -8px -8px 16px rgba(255, 255, 255, 0.8);
   transition: all 0.3s ease;
   margin-bottom: 15px;
 }
 
 .header:hover {
-  box-shadow: 8px 8px 16px rgba(163, 177, 198, 0.4),
-    -8px -8px 16px rgba(255, 255, 255, 0.9);
+  box-shadow: inset 6px 6px 12px rgba(163, 177, 198, 0.4),
+    inset -6px -6px 12px rgba(255, 255, 255, 0.9);
 }
 
 .user-greeting {
@@ -181,6 +181,33 @@
 }
 
 .show-more-button:active {
+  transform: translateY(0);
+  box-shadow: inset 6px 6px 12px rgba(163, 177, 198, 0.3),
+    inset -6px -6px 12px rgba(255, 255, 255, 0.8);
+}
+
+.statistics-button {
+  flex-shrink: 0;
+  background: linear-gradient(145deg, #52c41a, #389e0d);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 12px 20px;
+  font-size: clamp(14px, 3vw, 16px);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 6px 6px 12px rgba(163, 177, 198, 0.3),
+    -6px -6px 12px rgba(255, 255, 255, 0.8);
+}
+
+.statistics-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 8px 8px 16px rgba(163, 177, 198, 0.4),
+    -8px -8px 16px rgba(255, 255, 255, 0.9);
+}
+
+.statistics-button:active {
   transform: translateY(0);
   box-shadow: inset 6px 6px 12px rgba(163, 177, 198, 0.3),
     inset -6px -6px 12px rgba(255, 255, 255, 0.8);

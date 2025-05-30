@@ -11,6 +11,12 @@ const MealDetailModal = ({ meal, onClose, onDelete, onEdit }) => {
       .toFixed(1);
   };
 
+  const getTotalInsulin = () => {
+    return meal.foodItems
+      .reduce((total, item) => total + (item.insulinUnits || 0), 0)
+      .toFixed(1);
+  };
+
   const handleDelete = () => {
     onDelete(meal.id);
   };
@@ -117,8 +123,13 @@ const MealDetailModal = ({ meal, onClose, onDelete, onEdit }) => {
                     <span className='food-name'>{food.name}</span>
                     <span className='food-grams'>{food.grams}g</span>
                   </div>
-                  <div className='food-sugar'>
-                    {food.sugarContent}g zuccheri
+                  <div className='food-nutrients'>
+                    <div className='food-sugar'>
+                      {food.sugarContent}g zuccheri
+                    </div>
+                    <div className='food-insulin'>
+                      {food.insulinUnits || 0}u insulina
+                    </div>
                   </div>
                 </motion.div>
               ))}
@@ -134,6 +145,12 @@ const MealDetailModal = ({ meal, onClose, onDelete, onEdit }) => {
               whileHover={{ scale: 1.02 }}
             >
               <strong>Zuccheri totali: {getTotalSugar()}g</strong>
+            </motion.div>
+            <motion.div
+              className='total-insulin-display'
+              whileHover={{ scale: 1.02 }}
+            >
+              <strong>Insulina totale: {getTotalInsulin()}u</strong>
             </motion.div>
           </motion.div>
 

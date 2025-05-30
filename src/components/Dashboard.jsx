@@ -7,6 +7,8 @@ import MealDetailModal from './MealDetailModal.jsx';
 import EditMealModal from './EditMealModal.jsx';
 import SettingsModal from './SettingsModal.jsx';
 import LoadingScreen from './LoadingScreen.jsx';
+import MealHistoryModal from './MealHistoryModal.jsx';
+import StatisticsModal from './StatisticsModal.jsx';
 import { GiMeal } from 'react-icons/gi';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -15,6 +17,8 @@ const Dashboard = () => {
   const [selectedMeal, setSelectedMeal] = useState(null);
   const [editingMeal, setEditingMeal] = useState(null);
   const [showSettings, setShowSettings] = useState(false);
+  const [showHistory, setShowHistory] = useState(false);
+  const [showStatistics, setShowStatistics] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const { currentUser, logout } = useAuth();
   const [meals, setMeals] = useState([
@@ -22,39 +26,120 @@ const Dashboard = () => {
       id: 1,
       name: 'Colazione',
       sugarLevel: '45.2g',
+      insulinUnits: '4.5u',
       foodItems: [
-        { id: 1, name: 'Cornetti', grams: 80, sugarContent: 18.5 },
-        { id: 2, name: 'Marmellata', grams: 30, sugarContent: 16.2 },
-        { id: 3, name: 'Latte', grams: 200, sugarContent: 10.5 },
+        {
+          id: 1,
+          name: 'Cornetti',
+          grams: 80,
+          sugarContent: 18.5,
+          carbContent: 18.5,
+          insulinUnits: 1.9,
+        },
+        {
+          id: 2,
+          name: 'Marmellata',
+          grams: 30,
+          sugarContent: 16.2,
+          carbContent: 16.2,
+          insulinUnits: 1.6,
+        },
+        {
+          id: 3,
+          name: 'Latte',
+          grams: 200,
+          sugarContent: 10.5,
+          carbContent: 10.5,
+          insulinUnits: 1.0,
+        },
       ],
     },
     {
       id: 2,
       name: 'Pranzo',
       sugarLevel: '38.7g',
+      insulinUnits: '3.9u',
       foodItems: [
-        { id: 4, name: 'Pasta', grams: 100, sugarContent: 25.3 },
-        { id: 5, name: 'Pomodoro', grams: 150, sugarContent: 8.2 },
-        { id: 6, name: 'Parmigiano', grams: 20, sugarContent: 5.2 },
+        {
+          id: 4,
+          name: 'Pasta',
+          grams: 100,
+          sugarContent: 25.3,
+          carbContent: 25.3,
+          insulinUnits: 2.5,
+        },
+        {
+          id: 5,
+          name: 'Pomodoro',
+          grams: 150,
+          sugarContent: 8.2,
+          carbContent: 8.2,
+          insulinUnits: 0.8,
+        },
+        {
+          id: 6,
+          name: 'Parmigiano',
+          grams: 20,
+          sugarContent: 5.2,
+          carbContent: 5.2,
+          insulinUnits: 0.6,
+        },
       ],
     },
     {
       id: 3,
       name: 'Merenda',
       sugarLevel: '22.8g',
+      insulinUnits: '2.3u',
       foodItems: [
-        { id: 7, name: 'Mela', grams: 120, sugarContent: 14.5 },
-        { id: 8, name: 'Biscotti', grams: 25, sugarContent: 8.3 },
+        {
+          id: 7,
+          name: 'Mela',
+          grams: 120,
+          sugarContent: 14.5,
+          carbContent: 14.5,
+          insulinUnits: 1.5,
+        },
+        {
+          id: 8,
+          name: 'Biscotti',
+          grams: 25,
+          sugarContent: 8.3,
+          carbContent: 8.3,
+          insulinUnits: 0.8,
+        },
       ],
     },
     {
       id: 4,
       name: 'Cena',
       sugarLevel: '31.5g',
+      insulinUnits: '3.2u',
       foodItems: [
-        { id: 9, name: 'Riso', grams: 80, sugarContent: 20.2 },
-        { id: 10, name: 'Verdure', grams: 100, sugarContent: 6.8 },
-        { id: 11, name: 'Pesce', grams: 150, sugarContent: 4.5 },
+        {
+          id: 9,
+          name: 'Riso',
+          grams: 80,
+          sugarContent: 20.2,
+          carbContent: 20.2,
+          insulinUnits: 2.0,
+        },
+        {
+          id: 10,
+          name: 'Verdure',
+          grams: 100,
+          sugarContent: 6.8,
+          carbContent: 6.8,
+          insulinUnits: 0.7,
+        },
+        {
+          id: 11,
+          name: 'Pesce',
+          grams: 150,
+          sugarContent: 4.5,
+          carbContent: 4.5,
+          insulinUnits: 0.5,
+        },
       ],
     },
   ]);
@@ -87,6 +172,24 @@ const Dashboard = () => {
       meals.map((meal) => (meal.id === updatedMeal.id ? updatedMeal : meal))
     );
     setEditingMeal(null);
+  };
+
+  const getDailyTotalSugar = () => {
+    return meals
+      .reduce((total, meal) => {
+        const mealSugar = parseFloat(meal.sugarLevel.replace('g', ''));
+        return total + mealSugar;
+      }, 0)
+      .toFixed(1);
+  };
+
+  const getDailyTotalInsulin = () => {
+    return meals
+      .reduce((total, meal) => {
+        const mealInsulin = parseFloat(meal.insulinUnits.replace('u', ''));
+        return total + mealInsulin;
+      }, 0)
+      .toFixed(1);
   };
 
   const pageVariants = {
@@ -212,6 +315,19 @@ const Dashboard = () => {
             </motion.button>
           </motion.div>
 
+          <motion.button
+            className='statistics-button'
+            onClick={() => setShowStatistics(true)}
+            whileHover={{ scale: 1.02, y: -2 }}
+            whileTap={{ scale: 0.98 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.0 }}
+            variants={itemVariants}
+          >
+            Mostra Statistiche
+          </motion.button>
+
           <motion.div
             className='meals-section'
             variants={itemVariants}
@@ -221,8 +337,61 @@ const Dashboard = () => {
               initial={{ y: -20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.8, duration: 0.5 }}
+              style={{
+                width: '100%',
+                display: 'flex',
+
+                justifyContent: 'space-between',
+                alignItems: 'center',
+
+                gap: '10px',
+              }}
             >
-              Oggi
+              <div
+                style={{
+                  display: 'flex',
+                  gap: '15px',
+                  fontSize: '16px',
+                  fontWeight: '500',
+                  width: '100%',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                }}
+              >
+                <span
+                  style={{
+                    color: '#667eea',
+                    background: 'linear-gradient(145deg, #f0f5ff, #d1d9e6)',
+                    padding: '8px 12px',
+                    borderRadius: '10px',
+                    boxShadow:
+                      'inset 3px 3px 6px rgba(163, 177, 198, 0.2), inset -3px -3px 6px rgba(255, 255, 255, 0.8)',
+                  }}
+                >
+                  {getDailyTotalSugar()}g zuccheri
+                </span>
+                <span
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                  }}
+                >
+                  Oggi
+                </span>
+
+                <span
+                  style={{
+                    color: '#1890ff',
+                    background: 'linear-gradient(145deg, #e6f7ff, #cce7f0)',
+                    padding: '8px 12px',
+                    borderRadius: '10px',
+                    boxShadow:
+                      'inset 3px 3px 6px rgba(163, 177, 198, 0.2), inset -3px -3px 6px rgba(255, 255, 255, 0.8)',
+                  }}
+                >
+                  {getDailyTotalInsulin()}u insulina
+                </span>
+              </div>
             </motion.h2>
             <MealList
               meals={meals}
@@ -235,6 +404,7 @@ const Dashboard = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 1.2 }}
+              onClick={() => setShowHistory(true)}
             >
               Mostra di più
             </motion.button>
@@ -271,6 +441,17 @@ const Dashboard = () => {
               user={currentUser}
               onClose={() => setShowSettings(false)}
               onLogout={logout}
+            />
+          )}
+
+          {showHistory && (
+            <MealHistoryModal onClose={() => setShowHistory(false)} />
+          )}
+
+          {showStatistics && (
+            <StatisticsModal
+              meals={meals}
+              onClose={() => setShowStatistics(false)}
             />
           )}
         </AnimatePresence>
