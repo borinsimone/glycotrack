@@ -28,6 +28,11 @@ const Login = () => {
     setLoading(false);
   };
 
+  const fillDemoCredentials = () => {
+    setEmail('demo@glycotrack.com');
+    setPassword('demo123');
+  };
+
   const pageVariants = {
     initial: { opacity: 0, y: 20 },
     in: { opacity: 1, y: 0 },
@@ -90,11 +95,39 @@ const Login = () => {
               color: '#0050b3',
             }}
           >
-            <strong>Credenziali Demo:</strong>
-            <br />
-            Email: demo@glycotrack.com
-            <br />
-            Password: demo123
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'flex-start',
+              }}
+            >
+              <div>
+                <strong>Credenziali Demo:</strong>
+                <br />
+                Email: demo@glycotrack.com
+                <br />
+                Password: demo123
+              </div>
+              <motion.button
+                type='button'
+                onClick={fillDemoCredentials}
+                style={{
+                  background: '#1890ff',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '4px',
+                  padding: '6px 12px',
+                  fontSize: '0.8rem',
+                  cursor: 'pointer',
+                  marginLeft: '10px',
+                }}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                Usa Demo
+              </motion.button>
+            </div>
           </div>
 
           <form

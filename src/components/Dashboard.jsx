@@ -206,7 +206,7 @@ const Dashboard = () => {
               >
                 <GiMeal
                   className='add-icon'
-                  size={150}
+                  size={130}
                 />
               </motion.div>
             </motion.button>
