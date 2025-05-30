@@ -17,26 +17,65 @@ const AddMealForm = ({ onAddMeal, onClose }) => {
       setIsLoadingNutrition(true);
       setError('');
 
-      // Using a nutrition API (example with Edamam or similar)
-      // Replace with your preferred nutrition API
+      console.log('🔍 [DEBUG] Richiesta API Nutritionix:', {
+        query: `${grams}g ${foodName}`,
+        grams,
+        foodName,
+      });
+
+      // Using Nutritionix API
       const response = await fetch(
-        `https://api.edamam.com/api/nutrition-data?app_id=YOUR_APP_ID&app_key=YOUR_APP_KEY&nutrition-type=cooking&ingr=${grams}g ${foodName}`
+        'https://trackapi.nutritionix.com/v2/natural/nutrients',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-app-id': '13672595',
+            'x-app-key': '205ca681b8105210da1e4779cd1ce67b',
+          },
+          body: JSON.stringify({
+            query: `${grams}g ${foodName}`,
+          }),
+        }
+      );
+
+      console.log(
+        '📡 [DEBUG] Response status:',
+        response.status,
+        response.statusText
       );
 
       if (!response.ok) {
+        console.error('❌ [DEBUG] Response non OK:', response.status);
         throw new Error('Errore nel recupero dei dati nutrizionali');
       }
 
       const data = await response.json();
+      console.log(
+        '📊 [DEBUG] Dati completi API:',
+        JSON.stringify(data, null, 2)
+      );
 
-      // Extract sugar content from response
-      const sugarContent = data.totalNutrients?.SUGAR?.quantity || 0;
+      // Extract total carbohydrate content from Nutritionix response
+      const carbContent = data.foods?.[0]?.nf_total_carbohydrate || 0;
 
-      return Math.round(sugarContent * 100) / 100; // Round to 2 decimal places
+      console.log('🍞 [DEBUG] Carboidrati estratti:', {
+        carbContent,
+        foods: data.foods?.length || 0,
+        firstFood: data.foods?.[0]?.food_name || 'N/A',
+      });
+
+      return Math.round(carbContent * 100) / 100; // Round to 2 decimal places
     } catch (error) {
-      console.error('Errore API nutrizione:', error);
-      // Fallback: estimate sugar content (this is just an example)
-      return Math.round(parseFloat(grams) * 0.1 * 100) / 100; // Rough estimate
+      console.error('💥 [DEBUG] Errore API nutrizione:', error);
+      console.error('💥 [DEBUG] Error details:', {
+        message: error.message,
+        stack: error.stack,
+      });
+      // Fallback: estimate carb content (more realistic than sugar estimate)
+      const fallbackCarbs = Math.round(parseFloat(grams) * 0.25 * 100) / 100;
+      console.log('🔄 [DEBUG] Usando fallback carb content:', fallbackCarbs);
+      return fallbackCarbs;
     } finally {
       setIsLoadingNutrition(false);
     }
@@ -56,14 +95,14 @@ const AddMealForm = ({ onAddMeal, onClose }) => {
       return;
     }
 
-    // Get sugar content from API
-    const sugarContent = await getNutritionData(currentFood.name, grams);
+    // Get carb content from API
+    const carbContent = await getNutritionData(currentFood.name, grams);
 
     const newFoodItem = {
       id: Date.now(),
       name: currentFood.name,
       grams: grams,
-      sugarContent: sugarContent,
+      carbContent: carbContent,
     };
 
     setFoodItems([...foodItems, newFoodItem]);
@@ -75,9 +114,9 @@ const AddMealForm = ({ onAddMeal, onClose }) => {
     setFoodItems(foodItems.filter((item) => item.id !== id));
   };
 
-  const getTotalSugar = () => {
+  const getTotalCarbs = () => {
     return foodItems
-      .reduce((total, item) => total + item.sugarContent, 0)
+      .reduce((total, item) => total + item.carbContent, 0)
       .toFixed(1);
   };
 
@@ -97,7 +136,7 @@ const AddMealForm = ({ onAddMeal, onClose }) => {
     const mealData = {
       name: mealName,
       foodItems: foodItems,
-      sugarLevel: `${getTotalSugar()}g`,
+      carbLevel: `${getTotalCarbs()}g`,
     };
 
     onAddMeal(mealData);
@@ -174,7 +213,7 @@ const AddMealForm = ({ onAddMeal, onClose }) => {
                         {item.grams > 1 ? ` (${item.grams}g)` : ''}
                       </span>
                       <span className='food-info'>
-                        {item.sugarContent}g zuccheri
+                        {item.carbContent}g carboidrati
                       </span>
                     </div>
                     <button
@@ -187,8 +226,8 @@ const AddMealForm = ({ onAddMeal, onClose }) => {
                   </div>
                 ))}
               </div>
-              <div className='total-sugar'>
-                <strong>Zuccheri totali: {getTotalSugar()}g</strong>
+              <div className='total-carbs'>
+                <strong>Carboidrati totali: {getTotalCarbs()}g</strong>
               </div>
             </div>
           )}
