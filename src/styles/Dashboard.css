@@ -412,7 +412,7 @@
 
 @media (max-width: 480px) {
   .meals-header {
-    flex-direction: column;
+    /* flex-direction: column; */
     gap: 1rem;
     align-items: stretch;
   }
