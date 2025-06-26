@@ -87,7 +87,7 @@ const AddMealForm = ({ onAddMeal, onClose }) => {
 
       if (!response.ok) {
         console.error('❌ [DEBUG] Response non OK:', response.status);
-        throw new Error('Errore nel recupero dei dati nutrizionali');
+        throw new Error('FOOD_NOT_FOUND');
       }
 
       const data = await response.json();
@@ -95,6 +95,12 @@ const AddMealForm = ({ onAddMeal, onClose }) => {
         '📊 [DEBUG] Dati completi API:',
         JSON.stringify(data, null, 2)
       );
+
+      // Check if food was found
+      if (!data.foods || data.foods.length === 0) {
+        console.log("❌ [DEBUG] Nessun alimento trovato nell'API");
+        throw new Error('FOOD_NOT_FOUND');
+      }
 
       // Extract total carbohydrate content from Nutritionix response
       const carbContent = data.foods?.[0]?.nf_total_carbohydrate || 0;
@@ -112,10 +118,14 @@ const AddMealForm = ({ onAddMeal, onClose }) => {
         message: error.message,
         stack: error.stack,
       });
-      // Fallback: estimate carb content (more realistic than sugar estimate)
-      const fallbackCarbs = Math.round(parseFloat(grams) * 0.25 * 100) / 100;
-      console.log('🔄 [DEBUG] Usando fallback carb content:', fallbackCarbs);
-      return fallbackCarbs;
+
+      // If food not found, throw specific error
+      if (error.message === 'FOOD_NOT_FOUND') {
+        throw new Error('FOOD_NOT_FOUND');
+      }
+
+      // For other errors, also throw FOOD_NOT_FOUND
+      throw new Error('FOOD_NOT_FOUND');
     } finally {
       setIsLoadingNutrition(false);
     }
@@ -135,21 +145,32 @@ const AddMealForm = ({ onAddMeal, onClose }) => {
       return;
     }
 
-    // Get carb content from API
-    const carbContent = await getNutritionData(currentFood.name, grams);
-    const insulinUnits = calculateInsulinUnits(carbContent);
+    try {
+      // Get carb content from API
+      const carbContent = await getNutritionData(currentFood.name, grams);
+      const insulinUnits = calculateInsulinUnits(carbContent);
 
-    const newFoodItem = {
-      id: Date.now(),
-      name: currentFood.name,
-      grams: grams,
-      carbContent: carbContent,
-      insulinUnits: insulinUnits,
-    };
+      const newFoodItem = {
+        id: Date.now(),
+        name: currentFood.name,
+        grams: grams,
+        carbContent: carbContent,
+        insulinUnits: insulinUnits,
+      };
 
-    setFoodItems([...foodItems, newFoodItem]);
-    setCurrentFood({ name: '', grams: '' });
-    setError('');
+      setFoodItems([...foodItems, newFoodItem]);
+      setCurrentFood({ name: '', grams: '' });
+      setError('');
+    } catch (error) {
+      if (error.message === 'FOOD_NOT_FOUND') {
+        alert(
+          'Alimento non trovato. Prova con un nome diverso o più specifico.'
+        );
+      } else {
+        alert('Errore nel recupero dei dati nutrizionali. Riprova.');
+      }
+      console.error("Errore nell'aggiunta del cibo:", error);
+    }
   };
 
   const removeFoodItem = (id) => {
@@ -195,6 +216,17 @@ const AddMealForm = ({ onAddMeal, onClose }) => {
   return (
     <div className='form-overlay'>
       <div className='form-container'>
+        <div className='form-header'>
+          <h2>Nuovo Pasto</h2>
+          <button
+            type='button'
+            className='close-button'
+            onClick={onClose}
+          >
+            ×
+          </button>
+        </div>
+
         <form onSubmit={handleSubmit}>
           <div className='form-group'>
             <label htmlFor='mealName'>Nome Pasto</label>
@@ -210,7 +242,7 @@ const AddMealForm = ({ onAddMeal, onClose }) => {
 
           <div className='food-section'>
             <h3>Aggiungi Cibo</h3>
-            <div className='food-input-row'>
+            <div className='food-input-grid'>
               <div className='form-group'>
                 <label htmlFor='foodName'>Nome Cibo</label>
                 <input
@@ -277,12 +309,19 @@ const AddMealForm = ({ onAddMeal, onClose }) => {
                   </div>
                 ))}
               </div>
+
               <div className='total-summary'>
-                <div className='total-carbs'>
-                  <strong>Carboidrati totali: {getTotalCarbs()}g</strong>
+                <div className='summary-row'>
+                  <span className='summary-label'>Carboidrati totali:</span>
+                  <span className='summary-value carbs'>
+                    {getTotalCarbs()}g
+                  </span>
                 </div>
-                <div className='total-insulin'>
-                  <strong>Insulina totale: {getTotalInsulin()}u</strong>
+                <div className='summary-row'>
+                  <span className='summary-label'>Insulina totale:</span>
+                  <span className='summary-value insulin'>
+                    {getTotalInsulin()}u
+                  </span>
                 </div>
               </div>
             </div>
@@ -290,7 +329,7 @@ const AddMealForm = ({ onAddMeal, onClose }) => {
 
           {error && <div className='error-message'>{error}</div>}
 
-          <div className='form-buttons'>
+          <div className='form-actions'>
             <button
               type='button'
               className='cancel-button'

@@ -3,7 +3,6 @@
   flex-direction: column;
   gap: 15px;
   width: 100%;
-  overflow-y: auto;
 }
 
 .meal-item {
@@ -11,13 +10,11 @@
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  background: #e0e5ec;
+
   border-radius: 15px;
   transition: all 0.3s ease;
   cursor: pointer;
   padding: 15px;
-  box-shadow: 6px 6px 12px rgba(163, 177, 198, 0.3),
-    -6px -6px 12px rgba(255, 255, 255, 0.8);
 }
 
 .meal-item:hover {
@@ -42,11 +39,12 @@
 .meal-sugar,
 .meal-insulin {
   color: #31456a;
-  font-size: 14px;
+  font-size: 10px;
   font-weight: 500;
   background: linear-gradient(145deg, #f0f5ff, #d1d9e6);
+
   padding: 6px 10px;
-  border-radius: 10px;
+  border-radius: 6px;
   box-shadow: inset 3px 3px 6px rgba(163, 177, 198, 0.2),
     inset -3px -3px 6px rgba(255, 255, 255, 0.8);
 }

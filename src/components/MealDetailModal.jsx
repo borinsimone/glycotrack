@@ -109,7 +109,7 @@ const MealDetailModal = ({ meal, onClose, onDelete, onEdit }) => {
           animate='visible'
         >
           <div className='foods-section'>
-            <motion.h3 variants={itemVariants}>Cibi del pasto</motion.h3>
+            <motion.h3 variants={itemVariants}>Contenuto del Pasto</motion.h3>
             <div className='food-list'>
               {meal.foodItems.map((food, index) => (
                 <motion.div
@@ -119,16 +119,22 @@ const MealDetailModal = ({ meal, onClose, onDelete, onEdit }) => {
                   whileHover={{ scale: 1.02, x: 5 }}
                   transition={{ delay: index * 0.05 }}
                 >
-                  <div className='food-info'>
+                  <div className='food-main-info'>
                     <span className='food-name'>{food.name}</span>
-                    <span className='food-grams'>{food.grams}g</span>
+                    <span className='food-weight'>{food.grams}g</span>
                   </div>
                   <div className='food-nutrients'>
-                    <div className='food-sugar'>
-                      {food.sugarContent}g zuccheri
+                    <div className='nutrient-item carbs'>
+                      <span className='nutrient-value'>
+                        {food.sugarContent}g
+                      </span>
+                      <span className='nutrient-label'>CHO</span>
                     </div>
-                    <div className='food-insulin'>
-                      {food.insulinUnits || 0}u insulina
+                    <div className='nutrient-item insulin'>
+                      <span className='nutrient-value'>
+                        {food.insulinUnits || 0}u
+                      </span>
+                      <span className='nutrient-label'>INS</span>
                     </div>
                   </div>
                 </motion.div>
@@ -137,73 +143,71 @@ const MealDetailModal = ({ meal, onClose, onDelete, onEdit }) => {
           </div>
 
           <motion.div
-            className='total-summary'
+            className='totals-summary'
             variants={itemVariants}
           >
-            <motion.div
-              className='total-sugar-display'
-              whileHover={{ scale: 1.02 }}
-            >
-              <strong>Zuccheri totali: {getTotalSugar()}g</strong>
-            </motion.div>
-            <motion.div
-              className='total-insulin-display'
-              whileHover={{ scale: 1.02 }}
-            >
-              <strong>Insulina totale: {getTotalInsulin()}u</strong>
-            </motion.div>
+            <div className='summary-card carbs-total'>
+              <div className='summary-value'>{getTotalSugar()}g</div>
+              <div className='summary-label'>Carboidrati Totali</div>
+            </div>
+            <div className='summary-card insulin-total'>
+              <div className='summary-value'>{getTotalInsulin()}u</div>
+              <div className='summary-label'>Insulina Totale</div>
+            </div>
           </motion.div>
 
           <motion.div
-            className='meal-actions'
+            className='action-buttons'
             variants={itemVariants}
           >
             <motion.button
-              className='edit-meal-button'
+              className='action-button edit-button'
               onClick={() => onEdit(meal)}
               whileHover={{ scale: 1.02, y: -2 }}
               whileTap={{ scale: 0.98 }}
             >
-              Modifica Pasto
+              ✏️ Modifica
             </motion.button>
 
             <AnimatePresence mode='wait'>
               {!showDeleteConfirm ? (
                 <motion.button
-                  className='delete-meal-button'
+                  className='action-button delete-button'
                   onClick={() => setShowDeleteConfirm(true)}
                   whileHover={{ scale: 1.02, y: -2 }}
                   whileTap={{ scale: 0.98 }}
                   initial={{ opacity: 1 }}
                   exit={{ opacity: 0, scale: 0.8 }}
                 >
-                  Elimina Pasto
+                  🗑️ Elimina
                 </motion.button>
               ) : (
                 <motion.div
-                  className='delete-confirm'
+                  className='delete-confirmation'
                   initial={{ opacity: 0, scale: 0.8, y: 20 }}
                   animate={{ opacity: 1, scale: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.8, y: 20 }}
                   transition={{ type: 'spring', stiffness: 200 }}
                 >
-                  <span>Sei sicuro?</span>
-                  <motion.button
-                    className='confirm-delete-button'
-                    onClick={handleDelete}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    Sì
-                  </motion.button>
-                  <motion.button
-                    className='cancel-delete-button'
-                    onClick={() => setShowDeleteConfirm(false)}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    No
-                  </motion.button>
+                  <span className='confirm-text'>Eliminare il pasto?</span>
+                  <div className='confirm-buttons'>
+                    <motion.button
+                      className='confirm-button yes'
+                      onClick={handleDelete}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      Sì
+                    </motion.button>
+                    <motion.button
+                      className='confirm-button no'
+                      onClick={() => setShowDeleteConfirm(false)}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      No
+                    </motion.button>
+                  </div>
                 </motion.div>
               )}
             </AnimatePresence>

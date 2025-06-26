@@ -2,289 +2,341 @@
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   z-index: 1000;
+  padding: 1rem;
 }
 
 .form-container {
-  background: #e0e5ec;
-  width: 90%;
-  max-width: 600px;
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
   border-radius: 20px;
-  padding: 30px;
-  box-shadow: 12px 12px 24px rgba(163, 177, 198, 0.6),
-    -12px -12px 24px rgba(255, 255, 255, 0.8);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  max-width: 420px;
   max-height: 90vh;
   overflow-y: auto;
+  position: relative;
 }
-.form-container form {
+
+.form-header {
   display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-.form-container h2 {
-  text-align: center;
-
-  color: #31456a;
-  font-size: 24px;
-  font-weight: 600;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 1.5rem 0;
+  margin-bottom: 1rem;
 }
 
-.form-container h3 {
-  color: #31456a;
-  font-size: 18px;
-  font-weight: 600;
+.form-header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #2e7d32;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  font-size: 1.8rem;
+  color: #666;
+  cursor: pointer;
+  padding: 0.25rem;
+  line-height: 1;
+  border-radius: 50%;
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.close-button:hover {
+  background: rgba(255, 0, 0, 0.1);
+  color: #ff4444;
+  transform: rotate(90deg);
+}
+
+form {
+  padding: 0 1.5rem 1.5rem;
 }
 
 .form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-
-  width: 100%;
-}
-.form-group:last-child {
-  width: 30%;
+  margin-bottom: 1.25rem;
 }
 
 .form-group label {
   display: block;
-
-  font-weight: 500;
-  color: #31456a;
-  font-size: 14px;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: #2e7d32;
+  font-size: 0.95rem;
 }
 
 .form-group input {
   width: 100%;
-  padding: 12px 15px;
-  background: #e0e5ec;
-  border: none;
+  padding: 0.875rem 1rem;
+  border: 2px solid rgba(76, 175, 80, 0.2);
   border-radius: 12px;
-  font-size: 16px;
-  color: #31456a;
-  box-shadow: inset 4px 4px 8px rgba(163, 177, 198, 0.3),
-    inset -4px -4px 8px rgba(255, 255, 255, 0.8);
-  transition: all 0.3s ease;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+  background: rgba(255, 255, 255, 0.8);
+  box-sizing: border-box;
 }
 
 .form-group input:focus {
   outline: none;
-  box-shadow: inset 6px 6px 12px rgba(163, 177, 198, 0.4),
-    inset -6px -6px 12px rgba(255, 255, 255, 0.9);
+  border-color: #4caf50;
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
 }
 
 .food-section {
-  background: #e0e5ec;
-  border-radius: 15px;
-  padding: 20px;
-  box-shadow: inset 3px 3px 6px rgba(163, 177, 198, 0.2),
-    inset -3px -3px 6px rgba(255, 255, 255, 0.8);
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
+  background: rgba(76, 175, 80, 0.05);
+  border-radius: 16px;
+  padding: 1.25rem;
+  margin-bottom: 1.25rem;
 }
 
-.food-input-row {
-  display: flex;
-  gap: 10px;
+.food-section h3 {
+  margin: 0 0 1rem 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #2e7d32;
+}
+
+.food-input-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
 }
 
 .add-food-button {
   width: 100%;
-  background: linear-gradient(145deg, #667eea, #5a67d8);
+  padding: 0.875rem;
+  background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
   color: white;
   border: none;
   border-radius: 12px;
-  padding: 12px;
-  font-size: 16px;
-  font-weight: 500;
+  font-size: 1rem;
+  font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 6px 6px 12px rgba(163, 177, 198, 0.3),
-    -6px -6px 12px rgba(255, 255, 255, 0.8);
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
 }
 
-.add-food-button:hover {
-  transform: translateY(-1px);
-  box-shadow: 8px 8px 16px rgba(163, 177, 198, 0.4),
-    -8px -8px 16px rgba(255, 255, 255, 0.9);
+.add-food-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
 }
 
 .add-food-button:disabled {
-  opacity: 0.6;
+  opacity: 0.7;
   cursor: not-allowed;
   transform: none;
 }
 
 .food-list-section {
-  background: #e0e5ec;
-  border-radius: 15px;
-  padding: 20px;
+  background: rgba(76, 175, 80, 0.05);
+  border-radius: 16px;
+  padding: 1.25rem;
+  margin-bottom: 1.25rem;
+}
 
-  box-shadow: inset 3px 3px 6px rgba(163, 177, 198, 0.2),
-    inset -3px -3px 6px rgba(255, 255, 255, 0.8);
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
+.food-list-section h3 {
+  margin: 0 0 1rem 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #2e7d32;
 }
 
 .food-list {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+  margin-bottom: 1.25rem;
 }
 
 .food-item {
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(76, 175, 80, 0.2);
+  border-radius: 12px;
+  padding: 1rem;
+  margin-bottom: 0.75rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  /* background: linear-gradient(145deg, #f0f5ff, #d1d9e6); */
-  padding: 12px 15px;
-  border-radius: 10px;
-  /* box-shadow: 3px 3px 6px rgba(163, 177, 198, 0.2),
-    -3px -3px 6px rgba(255, 255, 255, 0.8); */
-  position: relative;
+  transition: all 0.2s ease;
+}
+
+.food-item:hover {
+  background: rgba(255, 255, 255, 1);
+  box-shadow: 0 2px 8px rgba(76, 175, 80, 0.15);
 }
 
 .food-details {
-  display: flex;
-
-  gap: 4px;
+  flex: 1;
 }
 
 .food-name {
+  display: block;
   font-weight: 600;
-  color: #31456a;
-  font-size: 16px;
+  color: #333;
+  margin-bottom: 0.25rem;
+  font-size: 1rem;
 }
 
 .food-info {
-  font-size: 14px;
-  color: #667eea;
-  font-weight: 500;
+  font-size: 0.875rem;
+  color: #666;
 }
 
 .remove-food-button {
-  /* 
-  color: white;
-  border: none;
+  background: rgba(255, 87, 87, 0.1);
+  border: 1px solid rgba(255, 87, 87, 0.3);
+  color: #ff5757;
   border-radius: 50%;
-  width: 30px;
-  height: 30px;
+  width: 2rem;
+  height: 2rem;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  font-size: 18px;
+  font-size: 1.2rem;
   font-weight: bold;
-  transition: all 0.3s ease;*/
-  all: unset;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #e53e3e;
-  position: absolute;
-  top: 5px;
-  right: 5px;
-  height: 20px;
-  width: 20px;
-  border-radius: 5px;
-  color: white;
-  padding: 0;
+  transition: all 0.2s ease;
+  margin-left: 0.75rem;
 }
 
 .remove-food-button:hover {
-  background: #c53030;
+  background: rgba(255, 87, 87, 0.2);
   transform: scale(1.1);
 }
 
-.total-sugar {
-  background: linear-gradient(145deg, #667eea, #5a67d8);
-  color: white;
-  padding: 12px;
-  border-radius: 10px;
-  text-align: center;
-  font-size: 16px;
-  box-shadow: 3px 3px 6px rgba(163, 177, 198, 0.3),
-    -3px -3px 6px rgba(255, 255, 255, 0.8);
+.total-summary {
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 12px;
+  padding: 1rem;
+  border: 2px solid rgba(76, 175, 80, 0.2);
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.summary-row:last-child {
+  margin-bottom: 0;
+}
+
+.summary-label {
+  font-weight: 600;
+  color: #333;
+  font-size: 0.95rem;
+}
+
+.summary-value {
+  font-weight: 700;
+  font-size: 1rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+}
+
+.summary-value.carbs {
+  background: rgba(255, 193, 7, 0.2);
+  color: #f57c00;
+}
+
+.summary-value.insulin {
+  background: rgba(76, 175, 80, 0.2);
+  color: #2e7d32;
 }
 
 .error-message {
-  background: rgba(229, 62, 62, 0.1);
-  color: #e53e3e;
-  padding: 12px;
-  border-radius: 8px;
-  text-align: center;
-
-  font-size: 14px;
-  border: 1px solid rgba(229, 62, 62, 0.2);
+  background: rgba(255, 87, 87, 0.1);
+  border: 1px solid rgba(255, 87, 87, 0.3);
+  color: #d32f2f;
+  padding: 0.875rem;
+  border-radius: 12px;
+  margin-bottom: 1.25rem;
+  font-size: 0.95rem;
+  font-weight: 500;
 }
 
-.form-buttons {
-  display: flex;
-  justify-content: space-between;
-
-  gap: 15px;
+.form-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
 }
 
 .cancel-button,
 .submit-button {
-  flex: 1;
-  padding: 15px;
+  padding: 0.875rem 1rem;
+  border: none;
   border-radius: 12px;
-  font-size: 16px;
-  font-weight: 500;
+  font-size: 1rem;
+  font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
 }
 
 .cancel-button {
-  background: linear-gradient(145deg, #f0f5ff, #d1d9e6);
-  border: none;
-  color: #31456a;
-  box-shadow: 6px 6px 12px rgba(163, 177, 198, 0.3),
-    -6px -6px 12px rgba(255, 255, 255, 0.8);
+  background: rgba(108, 117, 125, 0.1);
+  color: #6c757d;
+  border: 2px solid rgba(108, 117, 125, 0.3);
 }
 
 .cancel-button:hover {
+  background: rgba(108, 117, 125, 0.2);
   transform: translateY(-1px);
-  box-shadow: 8px 8px 16px rgba(163, 177, 198, 0.4),
-    -8px -8px 16px rgba(255, 255, 255, 0.9);
 }
 
 .submit-button {
-  background: linear-gradient(145deg, #667eea, #5a67d8);
+  background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
   color: white;
-  border: none;
-  box-shadow: 6px 6px 12px rgba(163, 177, 198, 0.3),
-    -6px -6px 12px rgba(255, 255, 255, 0.8);
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
 }
 
 .submit-button:hover {
-  transform: translateY(-1px);
-  box-shadow: 8px 8px 16px rgba(163, 177, 198, 0.4),
-    -8px -8px 16px rgba(255, 255, 255, 0.9);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
 }
 
-.submit-button:active,
-.cancel-button:active {
-  transform: translateY(0);
-  box-shadow: inset 4px 4px 8px rgba(163, 177, 198, 0.3),
-    inset -4px -4px 8px rgba(255, 255, 255, 0.8);
-}
-
-@media (max-width: 600px) {
-  .food-input-row {
-    grid-template-columns: 1fr;
+/* Mobile optimizations */
+@media (max-width: 480px) {
+  .form-overlay {
+    padding: 0.5rem;
   }
 
-  .form-buttons {
-    flex-direction: column;
+  .form-container {
+    max-height: 95vh;
+    border-radius: 16px;
+  }
+
+  .form-header {
+    padding: 1rem 1rem 0;
+  }
+
+  form {
+    padding: 0 1rem 1rem;
+  }
+
+  .food-input-grid {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+
+  .form-group {
+    margin-bottom: 1rem;
+  }
+
+  .food-section,
+  .food-list-section {
+    padding: 1rem;
   }
 }

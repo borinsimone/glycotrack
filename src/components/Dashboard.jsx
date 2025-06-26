@@ -309,7 +309,7 @@ const Dashboard = () => {
               >
                 <GiMeal
                   className='add-icon'
-                  size={130}
+                  size={60}
                 />
               </motion.div>
             </motion.button>
@@ -333,70 +333,32 @@ const Dashboard = () => {
             variants={itemVariants}
             whileHover={{ scale: 1.01 }}
           >
-            <motion.h2
+            <motion.div
+              className='meals-header'
               initial={{ y: -20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.8, duration: 0.5 }}
-              style={{
-                width: '100%',
-                display: 'flex',
-
-                justifyContent: 'space-between',
-                alignItems: 'center',
-
-                gap: '10px',
-              }}
             >
-              <div
-                style={{
-                  display: 'flex',
-                  gap: '15px',
-                  fontSize: '16px',
-                  fontWeight: '500',
-                  width: '100%',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                }}
-              >
-                <span
-                  style={{
-                    color: '#667eea',
-                    background: 'linear-gradient(145deg, #f0f5ff, #d1d9e6)',
-                    padding: '8px 12px',
-                    borderRadius: '10px',
-                    boxShadow:
-                      'inset 3px 3px 6px rgba(163, 177, 198, 0.2), inset -3px -3px 6px rgba(255, 255, 255, 0.8)',
-                  }}
-                >
-                  {getDailyTotalSugar()}g zuccheri
-                </span>
-                <span
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                  }}
-                >
-                  Oggi
-                </span>
-
-                <span
-                  style={{
-                    color: '#1890ff',
-                    background: 'linear-gradient(145deg, #e6f7ff, #cce7f0)',
-                    padding: '8px 12px',
-                    borderRadius: '10px',
-                    boxShadow:
-                      'inset 3px 3px 6px rgba(163, 177, 198, 0.2), inset -3px -3px 6px rgba(255, 255, 255, 0.8)',
-                  }}
-                >
-                  {getDailyTotalInsulin()}u insulina
-                </span>
+              <h2>Pasti di Oggi</h2>
+              <div className='daily-totals'>
+                <div className='total-item sugar'>
+                  <span className='total-value'>{getDailyTotalSugar()}g</span>
+                  <span className='total-label'>Carboidrati</span>
+                </div>
+                <div className='total-item insulin'>
+                  <span className='total-value'>{getDailyTotalInsulin()}u</span>
+                  <span className='total-label'>Insulina</span>
+                </div>
               </div>
-            </motion.h2>
-            <MealList
-              meals={meals}
-              onMealClick={handleMealClick}
-            />
+            </motion.div>
+
+            <div className='meals-list-container'>
+              <MealList
+                meals={meals}
+                onMealClick={handleMealClick}
+              />
+            </div>
+
             <motion.button
               className='show-more-button'
               whileHover={{ scale: 1.02, y: -2 }}
@@ -406,7 +368,7 @@ const Dashboard = () => {
               transition={{ delay: 1.2 }}
               onClick={() => setShowHistory(true)}
             >
-              Mostra di più
+              Visualizza Storico
             </motion.button>
           </motion.div>
         </motion.div>
